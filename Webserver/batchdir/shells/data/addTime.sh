@@ -1,0 +1,2 @@
+yesterday=` perl -e "print sprintf '%04d${2}%02d${2}%02d %02d:%02d:%02d',(localtime(time()+${1}*86400))[5]+1900,(localtime(time()+${1}*86400))[4]+1,(localtime(time()+${1}*86400))[3],(localtime(time()+${1}*86400))[2],(localtime(time()+${1}*86400))[1],(localtime(time()+${1}*86400))[0]"`
+echo ${yesterday}

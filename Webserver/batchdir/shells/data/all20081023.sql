@@ -1,0 +1,26 @@
+set long 1999
+set linesize 1999
+set pagesize 0
+set feedback 0
+set termout off
+set heading off
+set longchunksize 1999 
+
+@IBS_BTAB_LARGEAMOUNT.sql
+@IBS_BTAB_TRANSSTATUS.sql
+@IBS_ETAB_AC.sql
+@IBS_PTAB_AC.sql
+@IBS_PTAB_TRANNAME.sql
+@IBS_PTAB_COUNTRYCODE.sql
+@IBS_ETAB_CIF.sql
+@IBS_ETAB_USER.sql
+#20081023
+@IBS_PTAB_DONMSG.sql
+@IBS_PTAB_FEECITY.sql
+@IBS_PTAB_FEEITEM.sql
+@IBS_PTAB_FEETYPE.sql
+@./20081023/IBS_PTAB_JNL_DONATE_1023.sql
+@./20081023/IBS_PTAB_JNL_EPAY_1023.sql
+@./20081023/IBS_PTAB_JNL_FEE_1023.sql
+
+exit

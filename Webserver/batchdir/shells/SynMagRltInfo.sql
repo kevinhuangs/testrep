@@ -1,0 +1,8 @@
+delete from IBS_ETAB_MAGRLT t;
+insert into IBS_ETAB_MAGRLT
+  (ENT_CIFNO,ENT_CIFNAME,TG_CIFNO,TG_CIFNAME)
+  (
+  select ENT_CIFNO,ENT_CIFNAME,TG_CIFNO,TG_CIFNAME from IBS_ETAB_MAGRLT_TMP
+  );
+commit;
+exit;

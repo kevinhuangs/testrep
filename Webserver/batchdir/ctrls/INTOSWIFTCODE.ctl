@@ -1,0 +1,15 @@
+LOAD DATA
+characterset ZHS16GBK
+INTO TABLE IBS_PTAB_SWIFTCODE_TMP
+TRUNCATE
+FIELDS TERMINATED BY "|+|"
+(  
+SWIFCODE   char(11),
+BANKNAME   char(105),
+COUNTRY    char(35),
+ADDRESS1   char(35),
+ADDRESS2   char(35), 
+ADDRESS3   char(35),
+ADDRESS4   char(35), 
+CITY       char(40)
+)

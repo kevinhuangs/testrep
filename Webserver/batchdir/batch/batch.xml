@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE config PUBLIC "-//PE//DTD BEAN//EN" "http://www.csii.com.cn/dtd/pe-config.dtd">
+
+<config>
+    <!-- 通用查询类交易Action -->
+        
+    <idFactory id="idBatchFactory" class="com.csii.pe.service.id.SequenceIdFactory">
+        <!--param name="type">6</param-->
+        <param name="length">6</param>
+        <param name="prefix"></param>   
+        <param name="sql">select IDFACTORY6_SEQ.Nextval from dual</param>
+        <ref name="dataSource">cebdbDataSource</ref>
+    </idFactory>
+    <action id="SynVacation" class="com.ceb.ibs.batch.SynVacation"  >
+        <!--<ref name="ftpTrans2">FtpTrans2</ref>-->
+        <param name="filePath">/backup/batchdir/anbmx/</param>
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+    </action>
+    
+    <action id="SyncronizeFundAction" class="com.ceb.ibs.batch.SyncronizeFundAction"  >
+        <ref name="ftpTrans">FtpTrans</ref>
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+    </action>   
+    <action id="SyncronizeCashMgmtCifInfoAction" class="com.ceb.ibs.batch.SyncronizeCashMgmtCifInfoAction"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">${uploadFilePath}</param>
+        <param name="serverIP">10.1.18.2</param>
+        <param name="serverPort">7776</param>
+        <param name="serverPath">batch/</param>
+        <param name="enviroment">${tft.enviroment}</param>
+    </action>
+    <action id="SyncronizeCashMgmtAcInfoAction" class="com.ceb.ibs.batch.SyncronizeCashMgmtAcInfoAction"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">${uploadFilePath}</param>
+        <param name="serverIP">10.1.18.2</param>
+        <param name="serverPort">7776</param>
+        <param name="serverPath">batch/</param>
+        <param name="enviroment">${tft.enviroment}</param>
+        
+    </action>
+    
+    <action id="SyncronizePaiJiaAction" class="com.ceb.ibs.batch.SyncronizePaiJiaAction"  >
+        <ref name="ftpTrans">FtpTransPJ</ref>
+    </action>       
+    
+    <action id="SyncronizeQCTCifInfoAction" class="com.ceb.ibs.batch.SyncronizeQCTCifInfoAction"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">${uploadFilePath}</param>
+        <param name="serverIP">10.1.18.90</param>
+        <param name="serverPort">7779</param>
+        <param name="serverPath"></param>
+        <param name="enviroment">${tft.enviroment}</param>
+        
+    </action>
+    
+    <!--add by songlei 20130509 begin -->
+    <action id="FinanceMergeFundAction" class="com.ceb.ibs.batch.FinanceMergeFundAction"  >
+        <ref name="ftpTrans">FtpTrans</ref>
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+    </action>       
+    
+    <action id="FinanceMergeFund4EntAction" class="com.ceb.ibs.batch.FinanceMergeFund4EntAction"  >
+        <ref name="ftpTrans">FtpTrans</ref>
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+    </action>       
+    
+    <action id="FundAllowed4EntAction" class="com.ceb.ibs.batch.FundAllowed4EntAction"  >
+    </action>       
+    <!--add by songlei 20130509 end -->
+    
+    <!--file transformer -->
+    <bean name="fileTransformerFactory" class="com.csii.pe.transform.TransformerFactory">
+            <param name="path">/file/</param>
+            <param name="debug">true</param>
+    </bean> 
+    <!--config of syncronize fund -->
+    <bean id="FtpTrans" class="com.ceb.ibs.batch.FtpTrans">
+      <param name="serverIp">10.1.8.122</param>
+      <param name="userName">netbank</param>
+      <param name="passWord">netbank</param>
+      <param name="filePath">/fund/backup/prdinfo/</param>
+      <param name="downPath">/backup/batchdir/syndata/</param>
+      <param name="targetName">fund.txt</param>       
+    </bean>
+    <!--config of syncronize vacation -->
+    <bean id="FtpTrans2" class="com.ceb.ibs.batch.FtpTrans">
+      <param name="serverIp">10.1.8.103</param>
+      <param name="userName">oracle</param> 
+      <param name="passWord">oracle</param>
+      <param name="filePath">/backup/batchdir/anbmx/</param>
+      <param name="downPath">/backup/batchdir/syndata/</param>
+      <param name="targetName">vacation.txt</param>       
+    </bean> 
+    
+    <!--config of syncronize vacation -->
+    <bean id="FtpTransPJ" class="com.ceb.ibs.batch.FtpTrans">
+      <param name="serverIp">10.1.8.52</param>
+      <param name="userName">u0000</param>  
+      <param name="passWord">u0000</param>
+      <param name="filePath">/home/gg/</param>
+      <param name="downPath">/backup/batchdir/syndata/</param>
+      <param name="targetName">price.txt</param>          
+    </bean>
+    
+<!--测试  
+    <bean id="FtpTransPJ" class="com.ceb.ibs.batch.FtpTrans">
+      <param name="serverIp">10.1.100.10</param>
+      <param name="userName">netbank</param>    
+      <param name="passWord">netbank</param>
+      <param name="filePath">/netbank/</param>
+      <param name="downPath">/app/tft/</param>
+      <param name="targetName">price.txt</param>          
+    </bean> 
+--> 
+    <!--后台统计批量程序1 网银交易量统计 -->
+    <bean id="MgmtBatchTrans" class="com.ceb.ibs.batch.MgmtBatchTrans">
+        <param name="everyRow">100</param>
+    </bean>
+    
+    <!--后台统计批量程序2 网银使用量统计 -->
+    <bean id="MgmtBatchUsed" class="com.ceb.ibs.batch.MgmtBatchUsed">
+      <ref name="sharedMap">SharedMap</ref>
+    </bean>
+
+    <bean id="MgmtBatchUser" class="com.ceb.ibs.batch.MgmtBatchUser">
+    </bean>
+    
+    <action id="CifNoJoinAction" class="com.ceb.ibs.batch.CifNoJoinAction"  >
+        <param name="path">/backup/batchdir/cifJoin/data/</param>
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+    </action>
+    
+<!--
+    <action id="GetPriceAction" class="com.ceb.ibs.batch.GetPriceAction"  >
+        <param name="path">/oracle/batchMgmt/cifJoin/data/</param>
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+    </action> -->
+    
+    <!--对私后台统计批量程序 对私客户数统计 -->
+    <bean id="CreateQueryTemp" class="com.ceb.ibs.batch.CreateQueryTemp">
+    </bean>
+    <!--对私后台统计批量程序 对私客户数统计 -->
+    <bean id="PerBatchUserCount" class="com.ceb.ibs.batch.PerBatchUserCount">
+    </bean>
+
+    <!--对私后台统计批量程序 网银证书统计 -->
+    <bean id="PerBatchUserCertCount" class="com.ceb.ibs.batch.PerBatchUserCertCount">
+         <ref name="sharedMap">SharedMap</ref>
+         <ref name="sqlMap2">radbSqlMapExecutor</ref>
+    </bean> 
+            
+    <!--对私后台统计批量程序 异常处理交易统计 -->
+    <bean id="PerBatchExceptionCount" class="com.ceb.ibs.batch.PerBatchExceptionCount">
+    </bean>
+    
+    <!--对私后台统计批量程序 银证通交易统计 -->
+    <bean id="PerBatchBankStockCount" class="com.ceb.ibs.batch.PerBatchBankStockCount">
+    </bean>
+    
+    <!--对私后台统计批量程序 外汇买卖交易统计 -->
+    <bean id="PerBatchExchangeCount" class="com.ceb.ibs.batch.PerBatchExchangeCount">
+    </bean> 
+    
+    <!--对私后台统计批量程序 质押贷款交易统计 -->
+    <bean id="PerBatchLoanCount" class="com.ceb.ibs.batch.PerBatchLoanCount">
+    </bean>
+    
+    <!--对私后台统计批量程序 基金交易统计 -->
+    <bean id="PerBatchFundCount" class="com.ceb.ibs.batch.PerBatchFundCount">
+    </bean>
+    
+    <!--对私后台统计批量程序 转账交易统计 -->
+    <bean id="PerBatchTransCount" class="com.ceb.ibs.batch.PerBatchTransCount">
+    </bean>
+    
+    <!--对私后台统计批量程序 财务查询交易统计 -->
+    <bean id="PerBatchAccCount" class="com.ceb.ibs.batch.PerBatchAccCount">
+    </bean>
+    
+    <!--对私后台统计批量程序 对私第三方存管交易统计 -->
+    <bean id="PerBatchSuperviseCount" class="com.ceb.ibs.batch.PerBatchSuperviseCount">
+    </bean>
+    
+    <!--对私后台统计批量程序 对私捐款交易统计 -->
+    <bean id="PerBatchDonateCount" class="com.ceb.ibs.batch.PerBatchDonateCount">
+    </bean>
+    
+    <!--对私后台统计批量程序 个人网银理财统计 -->
+    <bean id="PerBatchFinanceCount" class="com.ceb.ibs.batch.PerBatchFinanceCount">
+    </bean>
+
+    <!--对私后台统计批量程序 对私代缴费交易统计 -->
+    <bean id="PerBatchAgentfeeCount" class="com.ceb.ibs.batch.PerBatchAgentfeeCount">
+    </bean>
+    
+    <!--对私后台统计批量程序 对私积分交易统计 -->
+    <bean id="PerBatchPointsCount" class="com.ceb.ibs.batch.PerBatchPointsCount">
+    </bean>
+    
+    <!--对私后台统计批量程序 对私网上支付交易统计 -->
+    <bean id="PerBatchEpayCount" class="com.ceb.ibs.batch.PerBatchEpayCount">
+    </bean>
+
+    <!--对私后台统计批量程序 个人网银总表统计 -->
+    <bean id="PerBatchAllTableCount" class="com.ceb.ibs.batch.PerBatchAllTableCount">
+    </bean>
+    
+    <!--对私后台统计批量程序 银行柜台业务量统计 -->
+    <bean id="PerBatchTellerOperCount" class="com.ceb.ibs.batch.PerBatchTellerOperCount">
+         <ref name="sharedMap">SharedMap</ref>
+    </bean> 
+     <!--对私后台同步协议支付协议批量程序  -->
+    <bean id="SyncronizeEpayAgreement" class="com.ceb.ibs.batch.SyncronizeEpayAgreement">
+        <param name="filePath">/backup/batchdir/epaydata/</param>
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+    </bean>
+                                        
+    <action id="SynSanbaoCard" class="com.ceb.ibs.batch.SynSanbaoCard"  >
+      <param name="serverIp">10.193.31.1</param>
+      <param name="port">9000</param>
+      <param name="userName">CebITNB</param>    
+      <param name="passWord">Cebit2007</param>
+      <param name="filePath">/</param>
+      <param name="localPath">/backup/batchdir/synsanbao/</param>
+    </action>
+
+    <!--对私后台企业年金批量开户-->
+    <bean id="SyncronizeAnnuityCifInformation" class="com.ceb.ibs.batch.SyncronizeAnnuityCifInformation">
+        <param name="filePath">/backup/batchdir/annuitydata/</param>
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+        <ref name="idFactoryUserId">idFactoryUserId</ref>
+    </bean>
+    <idFactory id="idFactoryUserId" class="com.csii.pe.service.id.SequenceIdFactory">
+        <!--param name="type">9</param-->
+        <param name="length">9</param>
+        <param name="prefix">7</param>  
+        <param name="sql">select IDFACTORY9_SEQ.Nextval from dual</param>
+        <ref name="dataSource">cebdbDataSource</ref>
+    </idFactory>
+
+    <!--第三方存管协议-->
+    <bean id="SyncronizeSuperviseAgreement" class="com.ceb.ibs.batch.SyncronizeSuperviseAgreement">     
+        <ref name="transformerFactory">fileTransformerFactory</ref>     
+        <ref name="tftTrans">SuperViseTft</ref>
+    </bean>
+    
+    <!--批量同步第三方存管的协议-->
+    <action id="SuperViseTft" class="com.ceb.ibs.SuperViseTft">
+      <param name="tftPath">${tft.path}</param>
+      <param name="localPath">/backup/batchdir/tft/</param><!--/backup/batchdir/tft/(82)   c:\\(本地)-->
+      <param name="serverIP">10.1.8.143</param>
+      <param name="serverPort">6868</param>
+      <param name="serverPath">books/</param>
+      <param name="enviroment">${tft.enviroment}</param>
+    </action>
+<!-- 对私下载证书通知短信 add by caoz-->
+    <action id="CertUpdateMsgActionPer" class="com.ceb.ibs.batch.CertUpdateMsgActionPer" >
+        <ref name="sqlMap2">radbSqlMapExecutor</ref>
+        <param name="uploadFilePath">${uploadFilePath}</param>
+        <ref name="ftpTrans">FtpTrans4CertMsg</ref>
+        <ref name="tftTrans">TftTrans4CertMsg</ref><!--向短信平台传输文件增加tft方式-->
+    </action>
+    <bean id="FtpTrans4CertMsg" class="com.ceb.ibs.batch.FtpTrans">
+        <param name="serverIp">${msg.serverIp}</param>
+        <param name="userName">${msg.userName}</param>
+        <param name="passWord">${msg.passWord}</param>
+        <param name="filePath">${msg.filePath}</param>
+    </bean>
+   <!--向短信平台传输文件增加tft方式 20100408 上线-->
+    <action id="TftTrans4CertMsg" class="com.ceb.ibs.TftTrans4CertMsg">
+      <param name="tftPath">${tft.path}</param>
+      <param name="serverIP">${msg.serverIp}</param>
+      <param name="serverPort">7001</param>
+      <param name="enviroment">${tft.enviroment}</param>
+    </action>
+    <!--end-->
+    <!--对公网银有效户统计-->                                
+    <action id="MgmtBatchValidAc" class="com.ceb.ibs.batch.MgmtBatchValidAc"  >
+      <param name="filePath">/backup/batchdir/syndata/</param>
+      <param name="serverIp">10.1.88.1</param>
+      <param name="serverPort">21</param>
+      <param name="userName">zh_dzyhb</param>   
+      <param name="passWord">zhdzyhb</param>
+      <param name="serverPath">对公网银有效户/</param>
+    </action>                               
+    <action id="MgmtBatchCardJnl" class="com.ceb.ibs.batch.MgmtBatchCardJnl"  >
+      <param name="filePath">/backup/batchdir/syndata/</param>
+      <param name="serverIp">10.1.177.209</param>
+      <param name="serverPort">21</param>
+      <param name="userName">qs</param> 
+      <param name="passWord">qs123456</param>
+      <param name="serverPath">/</param>
+      <ref name="downExcel">excelDownloadCardAction</ref>
+    </action>
+    
+    <action id="excelDownloadCardAction" class="com.csii.ibs.action.IbsDownloadAction" >
+        <bean name="transformer" class="com.csii.pe.transform.excel.SimpleExcelTransformer" >
+          <param name="url">excel/carddown</param>
+          <map name="formatMapping">
+             <list name="JnlList">
+               <param>2 0 1</param>
+               <map>
+               <param name="AcNo">0 0 0 </param>
+               <param name="CardOwnerName">0 1 0</param>
+               <param name="UnitName">0 2 0</param>
+               <param name="Amount">0 3 0 </param>
+               <param name="JnlDate">0 4 0</param>
+               <param name="JnlTime">0 5 0</param>
+               <param name="AcNo2">0 6 0</param>
+               <param name="ToUnitName">0 7 0</param>
+               <param name="AutherNo">0 8 0</param>
+               <param name="JnlStatus">0 9 1</param>    
+               <param name="JnlNo">0 10 0</param>   
+               <param name="Note">0 11 0</param>   
+               </map>
+             </list>  
+           </map>
+           
+        </bean>  
+        <param name="dateFormat">yyyyMMdd</param>
+        <param name="fileNameSuffix">.xls</param>
+    </action>           
+    <!--机构号合并-->
+    <action id="PerBatchComOrganCount" class="com.ceb.ibs.batch.PerBatchComOrganCount" >
+       <param name="path">/backup/batchdir/anbmx/</param> 
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+        <ref name="idBatchFactory">idBatchFactory</ref>
+    </action>
+
+    <!--同步分行营业机构-->
+    <action id="MgmtBatchBranchInPhase" class="com.ceb.ibs.batch.MgmtBatchBranchInPhase" >
+       <param name="path">/backup/batchdir/anbmx/</param> 
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+    </action>
+
+    <!--ibs_etab_jnl2反序列化31-->
+    <action id="MgmtBatchAntiSerialization" class="com.ceb.ibs.batch.MgmtBatchAntiSerialization" >
+       <param name="everyrow">100</param><!--批处理数-->
+       <param name="path">/backup/batchdir/shells/data/add_tmp/</param><!--文件存储路径-->
+       <!--<ref name="transseq">idBatchFactory</ref>
+       <ref name="proxyseq">idBatchFactory</ref>
+       <ref name="curfixseq">idBatchFactory</ref>
+       <ref name="financeseq">idBatchFactory</ref>       
+       <ref name="b2eseq">idBatchFactory</ref>
+       <ref name="epayseq">idBatchFactory</ref>
+       <ref name="paytaxseq">idBatchFactory</ref>-->
+    </action>
+
+
+    <!--公务卡还款对账单批量程序-->
+    <action id="OffCardCompareBill" class="com.ceb.ibs.batch.OffCardCompareBill" >
+       <param name="path">/backup/batchdir/anbmx/</param> 
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+        <ref name="idBatchFactory">idBatchFactory</ref>
+    </action>
+
+    <!--同步对私核心客户信息-->
+    <action id="SyncronizePerCifAction" class="com.ceb.ibs.batch.SyncronizePerCifAction"  >
+        <param name="path">/backup/batchdir/anbmx/</param>
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+    </action>
+    <!--同步电子票据机构信息-->
+    <action id="SyncronizeDZPJOrganInfoAction" class="com.ceb.ibs.batch.SyncronizeDZPJOrganInfoAction">
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">/backup/batchdir/syndata/</param>
+        <param name="serverIP">10.1.18.193</param>
+        <param name="serverPort">6980</param>
+        <param name="serverPath"></param>
+        <param name="enviroment">${tft.enviroment}</param>
+    </action>
+    
+    <!--20070531优化后，进行统一配置信息-->
+    <bean id="SharedMap" class="com.ceb.ibs.batch.SharedMap">
+    <map name ="dataMap">
+        <map name="entTrsGroup">
+             <param name="FE280103">Batch</param>
+             <param name="FE280207">Batch</param>
+             <param name="FE060103">Batch</param>
+             
+
+             <param name="FE250103">Supervise</param>
+             <param name="FE250203">Supervise</param>
+
+             <param name="FE030103">Intransfer</param>
+
+             <param name="FE040103">Outtransfer</param>
+             <param name="FE040203">Outtransfer</param>
+
+             <param name="FE050103">Battransfer</param>
+             <param name="FE050203">Battransfer</param>
+             <param name="transfer_request">Battransfer</param>
+
+             <param name="FE070103">Group</param>
+             <param name="FE070105">Group</param>
+             <param name="FE070202">Group</param>
+             <param name="FE070305">Group</param>
+             <param name="FE070303">Group</param>
+
+             <param name="FE080103">Salary</param>
+             <param name="FE080207">Salary</param>
+
+             <param name="FE20current2Fixed3">Fix</param>
+             <param name="FE20fixed2Current3">Fix</param>
+
+             <param name="FE100102">Notice</param>
+             <param name="FE100203">Notice</param>
+             <param name="FE100303">Notice</param>
+             <param name="FE100403">Notice</param>
+             <param name="FE100305">Notice</param>
+
+             <param name="FE090603">Fund</param>
+             <param name="FE090703">Fund</param>
+             <param name="FE090804">Fund</param>
+             <param name="FE090904">Fund</param>
+             <param name="FE091004">Fund</param>
+             <param name="FE091103">Fund</param>
+
+        </map>
+        <list name="entTrsGroupList" >
+             <param >Batch</param>
+             <param >Supervise</param>
+             <param >Intransfer</param>
+             <param >Outtransfer</param>
+             <param >Battransfer</param>
+             <param >Group</param>
+             <param >Salary</param>
+             <param >Fix</param>
+             <param >Notice</param>
+             <param >Fund</param>
+        </list>
+
+
+        <map name="perCertCount">
+             <param name="11">UndownloadCount</param>
+             <param name="12">NormalCount</param>
+             <param name="13">RecallCount</param>
+             <param name="14">FreezeCount</param>
+
+             <param name="22">NewApplyCount</param>
+             <param name="26">UpdateCount</param>
+             <param name="27">RenewCount</param>
+        </map>
+        <map name="perCertSumCount">
+             <param name="1">CertCount</param>
+             <param name="2">NoCount</param>
+        </map>
+        <list name="perCertCountList" >
+             <param >UndownloadCount</param>
+             <param >NormalCount</param>
+             <param >RecallCount</param>
+             <param >FreezeCount</param>
+             <param >NewApplyCount</param>
+             <param >UpdateCount</param>
+             <param >RenewCount</param>
+             <param >CertCount</param>
+        </list>
+
+        <map name="perBjnlCount">
+             <param name="5389">OpenCount</param>
+             <param name="5394">CancelCount</param>
+             <param name="5397">MacertCount</param>
+             <param name="5395">RtpassCount</param>
+             <param name="5393">HangCount</param>
+             <param name="5401">TransCount</param>
+        </map>
+        <list name="perBjnlCountList" >
+             <param >OpenCount</param>
+             <param >CancelCount</param>
+             <param >MacertCount</param>
+             <param >RtpassCount</param>
+             <param >HangCount</param>
+             <param >TransCount</param>
+        </list>
+    </map>
+    </bean>
+
+<action id="PerBatchRegisterAction" class="com.ceb.ibs.batch.PerBatchRegisterAction">
+        <ref name="idFactoryAdd">idFactory4useradd</ref>
+        <ref name="idFactoryDel">idFactory4userdel</ref>
+        <param name="path">/backup/batchdir/anbmx/perbatchregister/</param>
+    </action>
+    
+    <idFactory id="idFactory4useradd" class="com.csii.pe.service.id.SequenceIdFactory">
+        <!--param name="type">5</param-->
+        <param name="length">9</param>
+        <param name="prefix">8</param>
+        <param name="sql">select IDFACTORY5_SEQ.Nextval from dual</param>
+        <ref name="dataSource">cebdbDataSource</ref>
+    </idFactory>
+    
+    
+    <idFactory id="idFactory4userdel" class="com.csii.pe.service.id.SequenceIdFactory">
+        <!--param name="type">5</param-->
+        <param name="length">9</param>
+        <param name="prefix">8</param>
+        <param name="sql">select IDFACTORY5_SEQ.Nextval from dual</param>
+        <ref name="dataSource">cebdbDataSource</ref>
+    </idFactory>
+            
+    <action id="PerBatchGetFile" class="com.ceb.ibs.batch.PerBatchGetFile"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">/backup/batchdir/anbmx/perbatchregister/</param>
+        <param name="serverIP">10.1.18.8</param>
+        <param name="serverPort">7779</param>
+        <param name="serverPath">ext/wy/</param>
+        <param name="enviroment">${tft.enviroment}</param>
+        
+    </action>   
+    <!--add by fangxianwan start-->
+    <action id="sendFileMsg" class="com.ceb.ibs.batch.MsgNoticeAction">
+        <param name="uploadFilePath">${uploadFilePath}</param>
+        <ref name="ftpTrans">FtpTrans4CertMsg</ref>
+        <ref name="tftTrans">TftTrans4CertMsg</ref><!--向短信平台传输文件增加tft方式-->
+    </action>
+    <!--add by fangxianwan end-->
+    <!--add by fangxw 网银账户销户同步 20110119 -->
+    <action id="SynNetbankAcInvalidation" class="com.ceb.ibs.batch.SynNetbankAcInvalidation"></action>
+    <!--add by fangxw 网银账户变动同步 20110119 -->
+    <action id="SynNetbankAcChangeAction" class="com.ceb.ibs.batch.SynNetbankAcChangeAction"></action>
+    <!--add by fangxianwan 20110511(托管数据同步) -->
+    <action id="SyncronizeTrusteeshipAssetAction" class="com.ceb.ibs.batch.SyncronizeTrusteeshipAssetAction"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">${uploadFilePath}</param>
+        <param name="serverIP">10.1.18.135</param>
+        <param name="serverPort">7779</param>
+        <param name="serverPath">netbank/</param>
+        <param name="enviroment">${tft.enviroment}</param>  
+    </action>
+    <action id="SyncronizeTrusteeshipAccountAction" class="com.ceb.ibs.batch.SyncronizeTrusteeshipAccountAction"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">${uploadFilePath}</param>
+        <param name="serverIP">10.1.18.135</param>
+        <param name="serverPort">7779</param>
+        <param name="serverPath">netbank/</param>
+        <param name="enviroment">${tft.enviroment}</param>  
+    </action>
+    <action id="SyncronizeTrusteeshipCustmerAction" class="com.ceb.ibs.batch.SyncronizeTrusteeshipCustmerAction"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">${uploadFilePath}</param>
+        <param name="serverIP">10.1.18.135</param>
+        <param name="serverPort">7779</param>
+        <param name="serverPath">netbank/</param>
+        <param name="enviroment">${tft.enviroment}</param>  
+    </action>
+    <action id="SyncronizeTrusteeshipReportItemAction" class="com.ceb.ibs.batch.SyncronizeTrusteeshipReportItemAction"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">${uploadFilePath}</param>
+        <param name="serverIP">10.1.18.135</param>
+        <param name="serverPort">7779</param>
+        <param name="serverPath">netbank/</param>
+        <param name="enviroment">${tft.enviroment}</param>  
+    </action>
+    <action id="SyncronizeTrusteeshipTransferTypeAction" class="com.ceb.ibs.batch.SyncronizeTrusteeshipTransferTypeAction"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">${uploadFilePath}</param>
+        <param name="serverIP">10.1.18.135</param>
+        <param name="serverPort">7779</param>
+        <param name="serverPath">netbank/</param>
+        <param name="enviroment">${tft.enviroment}</param>  
+    </action>
+    <!-- 托管增量 -->
+    <action id="SyncronizeTgCustmerAddAction" class="com.ceb.ibs.batch.SyncronizeTgCustmerAddAction"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">${uploadFilePath}</param>
+        <param name="serverIP">10.1.18.135</param>
+        <param name="serverPort">7779</param>
+        <param name="serverPath">netbank/</param>
+        <param name="enviroment">${tft.enviroment}</param>  
+    </action>
+    <action id="SyncronizeTgAccountAddAction" class="com.ceb.ibs.batch.SyncronizeTgAccountAddAction"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">${uploadFilePath}</param>
+        <param name="serverIP">10.1.18.135</param>
+        <param name="serverPort">7779</param>
+        <param name="serverPath">netbank/</param>
+        <param name="enviroment">${tft.enviroment}</param>  
+    </action>
+    <action id="SyncronizeTgAssetAddAction" class="com.ceb.ibs.batch.SyncronizeTgAssetAddAction"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">${uploadFilePath}</param>
+        <param name="serverIP">10.1.18.135</param>
+        <param name="serverPort">7779</param>
+        <param name="serverPath">netbank/</param>
+        <param name="enviroment">${tft.enviroment}</param>  
+    </action>
+    <!-- end by 20110511(托管数据同步) -->
+    <!--add by fangxianwan 20110607(对私易用性改造短信通知) start-->
+    <action id="UsabilityPersendFileMsg" class="com.ceb.ibs.batch.UsabilityPerMsgNoticeAction">
+        <param name="uploadFilePath">${uploadFilePath}</param>
+        <ref name="ftpTrans">FtpTrans4CertMsg</ref>
+        <ref name="tftTrans">TftTrans4CertMsg</ref><!--向短信平台传输文件增加tft方式-->
+    </action>
+    <!--add by 20110607 end-->
+    <!--为插入网银对账签约表而实现的反序列化-->
+    <action id="MgmtBatchSerialization" class="com.ceb.ibs.batch.MgmtBatchSerialization" >
+       <param name="everyrow">100</param><!--批处理数-->
+       <param name="path">/backup/batchdir/shells/data/add_tmp/</param>  <!-- 文件存储路径 -->
+        <!-- <param name="path">${uploadFilePath}</param>文件存储路径--> 
+       <!--<ref name="transseq">idBatchFactory</ref>
+       <ref name="proxyseq">idBatchFactory</ref>
+       <ref name="curfixseq">idBatchFactory</ref>
+       <ref name="financeseq">idBatchFactory</ref>       
+       <ref name="b2eseq">idBatchFactory</ref>
+       <ref name="epayseq">idBatchFactory</ref>
+       <ref name="paytaxseq">idBatchFactory</ref>-->
+    </action>
+    <!--手机银行批量同步（ 客户端商户信息表） add by dump 20120315 -->
+    <action id="SyncronizeClientShopInfoAction" class="com.ceb.ibs.batch.SyncronizeClientShopInfoAction"  >
+      <param name="serverIp">10.1.131.24</param>
+      <param name="userName">merchantmobile</param>
+      <param name="passWord">merchantmobile!</param>
+      <param name="filePath"></param>
+      <param name="downPath">${uploadFilePath}</param>
+    </action>
+    
+    <!--积分换礼品 add by dump 20120725 -->
+    <action id="PointsGiftSynAction" class="com.ceb.ibs.batch.PointsGiftSynAction"  >
+      <param name="readySuffix">.ready</param>
+      <param name="useSuffix">.Z</param>
+      <param name="fileName">PresentsFile_</param>
+      <param name="localPath">/backup/batchdir/anbmx/points/</param>
+    </action>
+    
+        
+<!-- add by huangshuai 20121022 for 批量短信开户  -->
+    <action id="MsgPerBatchGetFile" class="com.ceb.ibs.batch.MsgPerBatchGetFile"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">/backup/batchdir/anbmx/</param><!-- /backup/batchdir/anbmx/ -->
+        <param name="filenameprefix">ebi_cust4nbsms_</param>
+        <param name="uploadIP">10.1.26.208</param>
+        <param name="uploadPort">7777</param>
+        <param name="uploadPath">batch/</param>
+        <param name="enviroment">${tft.enviroment}</param>
+    </action>   
+    
+    <action id="IpadPerBatchGetFile" class="com.ceb.ibs.batch.IpadPerBatchGetFile"  >
+        <param name="tftPath">${tft.path}</param>
+        <param name="localPath">/backup/batchdir/anbmx/</param> <!-- d:\Ipad -->
+        <param name="filenameprefix"></param>
+        <param name="downloadIP">10.1.8.75</param>
+        <param name="downloadPort">7777</param>
+        <param name="downloadPath">NetBank/IpadCredit/</param>
+        <param name="enviroment">${tft.enviroment}</param>
+    </action>
+    
+    <!-- add by nixy 20130328 for 64570批量改开户机构号  -->
+    <action id="SynCbsAcOrgan" class="com.ceb.ibs.batch.SynCbsAcOrgan"  >
+    </action>
+    <!-- add by nixy 20130328 for 64071乐惠金卡批量同步logo  -->
+    <action id="SynCreditLogo" class="com.ceb.ibs.batch.SynCreditLogo"  >
+    </action>
+    <action id="SynDeleCreditLogo" class="com.ceb.ibs.batch.SynDeleCreditLogo"  >
+    </action>
+    <!-- add by dump 20130819 for 后台分行批量开户  begin-->
+	<action id="MgmtPerBatchAction" class="com.ceb.ibs.batch.MgmtPerBatchAction"  >
+		<param name="tftPath">${tft.path}</param>
+       	<param name="localPath">/backup/batchdir/anbmx/mgmtperbatch/</param>
+       	<param name="downPath">mgmtperbatch/</param><!--8.75上下载文件路径/app/tft/mgmtperbatch/ -->
+      	<param name="uploadIP">10.1.26.208</param>
+      	<param name="uploadPort">7777</param>
+      	<param name="uploadPath">batch/</param>
+      	<param name="enviroment">${tft.enviroment}</param>
+    </action>
+    <!-- add by dump 20130819 for 后台分行批量开户  end-->
+    
+    <!--需求编号68558 网银证书收费 add by lyf 20130808 begin  -->
+    <action id="ByHandCreateCertBill" class="com.ceb.ibs.batch.ByHandCreateCertBill"  >
+    </action>    
+    <action id="SyncronizeCreateCertBill" class="com.ceb.ibs.batch.SyncronizeCreateCertBill"  >
+    </action>
+    <!-- 需求编号68558 网银证书收费 add by lyf 20130808 end -->
+	<!--add by huangshuai 20131104 71986-->
+    <!--ATM行情文件	-->
+    <action id="SyncronizeFundAction4ATM" class="com.ceb.ibs.batch.SyncronizeFundAction4ATM"  >
+		<ref name="transformerFactory">fileTransformerFactory</ref>
+		<param name="serverIp">10.1.8.122</param>  
+	    <param name="userName">netbank</param> 
+        <param name="passWord">netbank</param> 
+        <param name="filePath">/fund/backup/prdinfo/</param> 
+        <param name="downPath">/backup/batchdir/syndata/</param>
+        <param name="targetName">2_fund.txt</param>
+        <param name="targetName1">4_fund.txt</param>
+	</action>
+	<!--ATM总表整合	-->
+	<action id="FinanceMergeFundAction4ATM" class="com.ceb.ibs.batch.FinanceMergeFund4ATMAction"  >
+        <ref name="ftpTrans">FtpTrans</ref>
+        <ref name="transformerFactory">fileTransformerFactory</ref>
+    </action>  
+	<!--ATM权益须知	-->
+    <action id="ATMGenerateAckownledgeFile" class="com.ceb.ibs.batch.ATMGenerateAckownledgeFile"  >
+       	<param name="localPath">/backup/batchdir/syndata/</param>  
+    </action>
+    <!--ATM理财产品说明书-->
+    <action id="ATMGenerateProductProtocolFile" class="com.ceb.ibs.batch.ATMGenerateProductProtocolFile"  >
+       	<param name="localPath">/backup/batchdir/syndata/</param>  
+    </action>
+	<!--ATM风险揭示书-->
+    <action id="ATMGenerateRiskStatementFile" class="com.ceb.ibs.batch.ATMGenerateRiskStatementFile"  >
+    	<param name="localPath">/backup/batchdir/syndata/</param>  
+    </action>
+	<!--end by huangshuai 20131104 71986-->
+    <bean id="BatchExecute" class="com.ceb.ibs.BatchExecute">
+    <list name="beanList">
+        <ref>SynVacation</ref>             <!--同步节假日0-->
+        <ref>SyncronizePaiJiaAction</ref>  <!--同步外汇牌价表1-->
+        <ref>SyncronizeTrusteeshipAssetAction</ref> <!--托管资产表信息同步2--> 
+        <ref>SyncronizeTrusteeshipAccountAction</ref> <!--托管账号表信息同步3--> 
+        <ref>SyncronizeTrusteeshipCustmerAction</ref> <!--托管客户表信息同步4--> 
+        <ref>SyncronizeTrusteeshipReportItemAction</ref> <!--托管表信息同步5--> 
+        <ref>SyncronizeTrusteeshipTransferTypeAction</ref> <!--托管信息同步6--> 
+        <!--对公报表统计-->
+        <ref>MgmtBatchCardJnl</ref>        <!--对公分销卡统计7-->
+
+        
+
+        
+        <ref>SyncronizeEpayAgreement</ref> <!--协议支付协议同步8-->        
+        <ref>SyncronizeAnnuityCifInformation</ref> <!--对私后台企业年金批量开户9-->
+        <ref>SyncronizeSuperviseAgreement</ref> <!--对私第三方存管协议同步10-->
+        <ref>SyncronizeCashMgmtCifInfoAction</ref> <!--现金管理客户签约信息同步11-->
+        <ref>SyncronizeCashMgmtAcInfoAction</ref> <!--现金管理账户信息同步12-->
+        <ref>CertUpdateMsgActionPer</ref><!--证书下载短信通知13-->
+        <ref>SyncronizeDZPJOrganInfoAction</ref> <!--电子票据机构信息同步14-->
+        <ref>MgmtBatchBranchInPhase</ref> <!--同步分行营业机构15-->
+        <ref>PerBatchGetFile</ref> <!--对私批量开户同步文件16-->
+        <ref>PerBatchRegisterAction</ref> <!--对私批量开户27-->
+        <ref>SyncronizeQCTCifInfoAction</ref> <!--全程通客户签约信息同步18-->          
+        <ref>sendFileMsg</ref> <!--以文件的形式批量发送短信 19-->
+        
+        <ref>SynNetbankAcInvalidation</ref> <!--网银账户销户同步20-->
+        <ref>SynNetbankAcChangeAction</ref> <!--网银账户变动同步21-->
+            
+       
+        
+        <ref>SynSanbaoCard</ref>           <!--三宝卡同步22-->
+        <ref>MgmtBatchValidAc</ref>        <!--对公有效户统计23-->
+        <ref>PerBatchComOrganCount</ref>    <!--机构号合并24-->
+        <ref>OffCardCompareBill</ref>        <!--对公有效户统计25-->
+        <ref>SyncronizeTgCustmerAddAction</ref> <!--托管（增量）资产表信息同步26--> 
+        <ref>SyncronizeTgAccountAddAction</ref> <!--托管（增量）表信息同步27--> 
+        <ref>SyncronizeTgAssetAddAction</ref> <!--托管（增量）表信息同步28-->
+        <ref>UsabilityPersendFileMsg</ref> <!--对私易用性改造短信通知29-->
+        <ref>SyncronizeClientShopInfoAction</ref><!--对私易用性改造短信通知30-->
+        <ref>IpadPerBatchGetFile</ref><!--信用卡IPAD开户31-->
+		<ref>SyncronizeCreateCertBill</ref> <!--生成对公网银证书缴费账单32-->
+		<ref>MgmtPerBatchAction</ref> <!--后台分行批量开户33-->
+    </list>
+    </bean>
+                            
+</config>

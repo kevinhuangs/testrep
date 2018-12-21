@@ -1,0 +1,36 @@
+#LANG=zh_CN.hp15CN
+CTLPATH=/Webserver/batchdir/ctrls
+DATAPATH=/Webserver/batchdir/anbmx
+SQLPATH=/Webserver/batchdir/shells
+DBUSER=bankdb
+DBPWD=bankdb
+DBSID=newebank
+
+TZ=CST+16
+finalDate=`date +%Y%m%d`
+if [ "$1" != "" ]; then finalDate=$1
+else i=1
+fi
+echo "==>获取文件日期为："$finalDate
+TZ=CST-8
+
+export ORACLE_BASE=/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/9.2.0
+
+#insert tmp data
+echo ${ORACLE_HOME}
+echo ${HOME}
+${ORACLE_HOME}/bin/sqlldr userid=${DBUSER}/${DBPWD} control=${CTLPATH}/INTABBANKNO.ctl data=${DATAPATH}/D0310_${finalDate}_pxdzf.txt silent=feedback
+if [ -e "${DATAPATH}/D0310_${finalDate}_pxdzf.txt" ]; then
+fileline1=`echo "\n" >>${DATAPATH}/D0310_${finalDate}_pxdzf.txt|sed /^[[:space:]]*$/d ${DATAPATH}/D0310_${finalDate}_pxdzf.txt|wc -l`
+sqlplus bankdb/bankdb @${SQLPATH}/CountBankNoTemp.sql
+fileline2=`cat ibs_ptab_bankno_temp.txt`
+if [ fileline1  -eq fileline2 ]; then
+sqlplus bankdb/bankdb @${SQLPATH}/UpdateBankNo.sql
+sqlplus bankdb/bankdb @${SQLPATH}/UpdateBankNoChshdm.sql
+else
+echo "NTEBANK-ERROR 表IBS_PTAB_BANKNO_TEMP导入数据失败 SynBankNo.sh" >>/Webserver/batchdir/log/tt_run.log
+fi
+else 
+echo "NTEBANK-ERROR 获取小额联行号表同步文件失败！"
+fi

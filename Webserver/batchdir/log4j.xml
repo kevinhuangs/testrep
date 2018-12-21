@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" threshold="null" debug="null">
+
+
+  <!-- ================================= -->
+  <!-- Preserve messages in a local file -->
+  <!-- ================================= -->
+
+  <!-- A time/date based rolling appender -->
+  <appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="File" value="/backup/batchdir/log/batch.log"/>
+    <!-- <param name="Encoding" value=""/> -->
+    <!--<param name="BufferedIO" value="true"/>
+    <param name="BufferSize" value="1024"/>
+    <param name="MaxFileSize" value="10KB"/>-->
+    <param name="Append" value="true"/>
+    <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+
+    <param name="Threshold" value="info"/>
+    <!--<param name="Target" value="System.out"/>-->
+
+    <layout class="org.apache.log4j.PatternLayout">
+      <!-- The default pattern: Date Priority [logger] Message\n -->
+	  <!--<param name="ConversionPattern" value="%d %-5p [%c{1}] %m%n"/>-->
+      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p [%c{1}] %m%n"/>
+      <!-- The full pattern: Date MS Priority [logger] (Thread:NDC) Message\n
+      <param name="ConversionPattern" value="%d %-5r %-5p [%c{1}] (%t:%x) %m%n"/>
+       -->
+    </layout>	    
+  </appender>
+
+  <appender name="AppFILE" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="File" value="/backup/batchdir/log/appBatch.log"/>
+    <!-- <param name="Encoding" value=""/> -->
+    <!--<param name="BufferedIO" value="true"/>
+    <param name="BufferSize" value="1024"/>
+    <param name="MaxFileSize" value="10KB"/>-->
+    <param name="Append" value="true"/>
+    <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+
+    <param name="Threshold" value="DEBUG"/>
+    <!--<param name="Target" value="System.out"/>-->
+
+    <layout class="org.apache.log4j.PatternLayout">
+      <!-- The default pattern: Date Priority [logger] Message\n -->
+	  <!--<param name="ConversionPattern" value="%d %-5p [%c{1}] %m%n"/>-->
+      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p [%c{1}] %m%n"/>
+      <!-- The full pattern: Date MS Priority [logger] (Thread:NDC) Message\n
+      <param name="ConversionPattern" value="%d %-5r %-5p [%c{1}] (%t:%x) %m%n"/>
+       -->
+    </layout>	    
+  </appender>
+  <!-- ============================== -->
+  <!-- Append messages to the console -->
+  <!-- ============================== -->
+
+  <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+    <param name="Threshold" value="DEBUG"/>
+    <param name="Target" value="System.out"/>
+
+    <layout class="org.apache.log4j.PatternLayout">
+      <!-- The default pattern: Date Priority [logger] Message\n -->
+      <!--<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>-->
+      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p [%c{1}] %m%n"/>
+    </layout>
+  </appender>
+
+
+  <!-- ================ -->
+  <!-- Limit categories -->
+  <!-- ================ -->
+
+ 
+<!--  <logger name="java.sql.PreparedStatement" additivity="true"> -->
+  
+  <logger name="java.sql" additivity="true">  
+    <level value="info"/>
+  </logger>
+  
+  <logger name="org" additivity="true">  
+    <level value="info"/>
+  </logger>
+  
+<logger name="com.csii.pe.common.security.command" additivity="true">  
+    <level value="info"/>
+  </logger>
+  
+ <logger name="com.ceb.ibs.batch.SyncronizeCashMgmtAcInfoAction" >
+   <level value="debug"/>
+    <appender-ref ref="AppFILE" />
+ </logger>
+
+  <root>
+    <level value="info" /> 
+     <appender-ref ref="FILE" /> 
+  </root>
+  
+  
+  
+</log4j:configuration>
